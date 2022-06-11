@@ -9,7 +9,7 @@ const Todo = (props) => {
     const [todo, setTodo] = useState('');
     
     const handleDelete = async (id) => {
-        const res = await fetch(`http://127.0.0.1:8000/api/todos/${id}`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}todos/${id}`, {
             method: 'DELETE'
         });
         props.onUpdateData();
@@ -28,7 +28,7 @@ const Todo = (props) => {
     const handleUpdate =async (id, todo)=>{
         console.log("udapet id ",id)
         console.log("update todo ",todo)
-        const res = await fetch(`http://127.0.0.1:8000/api/todos/${id}`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}todos/${id}`, {
             method: 'put',
             headers: {
                 'Content-Type': 'application/json'
@@ -41,14 +41,20 @@ const Todo = (props) => {
         props.onUpdateData();
     }
 
-    const handleDone = async (id) => {
-        const res = await fetch(`http://127.0.0.1:8000/api/todos/${id}`, {
+    const handleDone = async (id, is_done) => {
+        let update;
+        if(is_done===1){
+             update=0;
+        }else{
+             update=1;
+        }
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}todos/${id}`, {
             method: 'put',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                is_done: true
+                is_done: update
             })
         });
         props.onUpdateData();
@@ -57,7 +63,7 @@ const Todo = (props) => {
   return (
     <div className='flex items-center justify-between p-1 px-2 bg-gray-700 rounded-sm cursor-pointer'>
         <div className='flex items-center w-full pr-2'>
-            <input onClick={()=>handleDone(todos.id)} checked={todos.is_done ? 'checked' : ''}  className='p-2 mt-1 mr-2 ' type="checkbox" name="isDone" id="is_done" />
+            <input onClick={()=>handleDone(todos.id, todos.is_done)} checked={todos.is_done ? 'checked' : ''}  className='p-2 mt-1 mr-2 ' type="checkbox" name="isDone" id="is_done" />
             {isInput ? (
                 <input value={todo} onChange={(e) => {setTodo(e.target.value) }} className='w-full px-2 text-gray-700 outline-none ring-1 ring-blue-400' type="text" />
             ) : (

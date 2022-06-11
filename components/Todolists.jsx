@@ -8,14 +8,14 @@ const Todolists = (todos) => {
     const [todosList, setTodosList] = useState([])
 
     const Todos = async () => {
-        const res = await fetch(`http://127.0.0.1:8000/api/todos`);
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}todos`);
         const data = await res.json();
         setTodosList(data);
     };
 
     const handleAdd= async (e) => {
         // e.preventDefault();
-        const res = await fetch('http://127.0.0.1:8000/api/todos', {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}todos`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -33,7 +33,7 @@ const Todolists = (todos) => {
     }
 
     const handleDone = async (id) => {
-        const res = await fetch(`http://127.0.0.1:8000/api/todos/${id}`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}todos/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
